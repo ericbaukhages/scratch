@@ -4,14 +4,16 @@ SCRATCH_DIR=~/.scratch
 
 INPUT="$1"
 
-if [[ "$#" -ne 1 ]]; then
+if [[ "$#" -eq 1 ]]; then
+  INPUT="$SCRATCH_DIR/$INPUT.md"
+else
   INPUT="$SCRATCH_DIR/`ls -t $SCRATCH_DIR | head -n 1`"
 fi
 
-if [[ ! -e $INPUT ]]; then
-  echo "$INPUT does not exist"
-  exit 1
-fi
+dateFromFile()
+{
+  basename $1 | sed 's/.md//g'
+}
 
 outputTime()
 {
@@ -23,6 +25,12 @@ outputTime()
   
   echo "${hours}h ${minutes}m ${seconds}s"
 }
+
+if [[ ! -e $INPUT ]]; then
+  DATE=`dateFromFile $INPUT`
+  echo "No record found for $DATE"
+  exit 1
+fi
 
 echo "==== TIME ===="
 
@@ -49,4 +57,4 @@ done
 unset IFS
 
 echo "==== TOTAL ===="
-echo "Total time tracked for \"$INPUT\": `outputTime $totalSeconds`"
+echo "Total time tracked for `dateFromFile $INPUT`: `outputTime $totalSeconds`"
