@@ -1,11 +1,12 @@
 #!/bin/bash
 
-if [[ "$#" -ne 1 ]]; then
-  echo "Usage: $0 [input.md]"
-  exit 1
-fi
+SCRATCH_DIR=~/.scratch
 
 INPUT="$1"
+
+if [[ "$#" -ne 1 ]]; then
+  INPUT="$SCRATCH_DIR/`ls -t $SCRATCH_DIR | head -n 1`"
+fi
 
 if [[ ! -e $INPUT ]]; then
   echo "$INPUT does not exist"

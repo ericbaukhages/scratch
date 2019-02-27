@@ -1,7 +1,10 @@
 #!/bin/bash
 
+SCRATCH_DIR=~/.scratch
+
 SCRATCH_PREV_DIR=`pwd`
-cd ~/.scratch
+
+cd $SCRATCH_DIR
 
 FILENAME="`date +"%Y-%m-%d"`.md"
 
