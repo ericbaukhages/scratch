@@ -39,7 +39,10 @@ for date in `pandoc -t html $INPUT | pup 'h2 json{}' | jq '.[] | .text' -r | sed
   endDate=`date -j -f "%I:%M %p" "$end" "+%s"`
 
   diff=$(($endDate - $startDate)) 
-  totalSeconds=$(($totalSeconds + $diff))
+
+  if [[ $title != "Lunch" ]]; then
+    totalSeconds=$(($totalSeconds + $diff))
+  fi
 
   echo " - $title: `outputTime $diff`"
 done
