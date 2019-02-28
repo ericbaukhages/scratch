@@ -35,6 +35,7 @@ fi
 echo "==== TIME ===="
 
 totalSeconds=0
+lunchSeconds=0
 
 IFS=$'
 '
@@ -47,9 +48,10 @@ for date in `pandoc -t html $INPUT | pup 'h2 json{}' | jq '.[] | .text' -r | sed
   endDate=`date -j -f "%I:%M %p" "$end" "+%s"`
 
   diff=$(($endDate - $startDate)) 
+  totalSeconds=$(($totalSeconds + $diff))
 
-  if [[ $title != "Lunch" ]]; then
-    totalSeconds=$(($totalSeconds + $diff))
+  if [[ $title == "Lunch" ]]; then
+    lunchSeconds=$(($lunchSeconds + $diff))
   fi
 
   echo " - $title: `outputTime $diff`"
@@ -57,4 +59,5 @@ done
 unset IFS
 
 echo "==== TOTAL ===="
-echo "Total time tracked for `dateFromFile $INPUT`: `outputTime $totalSeconds`"
+echo "Total time tracked for `dateFromFile $INPUT`: `outputTime $(($totalSeconds - $lunchSeconds))`"
+echo "                  including LUNCH: `outputTime $totalSeconds`"
