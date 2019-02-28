@@ -22,7 +22,7 @@ outputTime()
   hours=$(($timeInSeconds / 3600 ))
   minutes=$((($timeInSeconds % 3600) / 60))
   seconds=$(($timeInSeconds % 60 ))
-  
+
   echo "${hours}h ${minutes}m ${seconds}s"
 }
 
@@ -39,10 +39,14 @@ lunchSeconds=0
 
 IFS=$'
 '
-for date in `pandoc -t html $INPUT | pup 'h2 json{}' | jq '.[] | .text' -r | sed 's/\(.*\) - \(.* [ap]m\) to \(.* [ap]m\)/{"title":"\1","start":"\2","end":"\3"}/g'`; do
-  title=`echo $date | jq -r '.title'`
-  start=`echo $date | jq -r '.start'`
-  end=`echo $date | jq -r '.end'`
+for entry in `pandoc -t html $INPUT | pup 'h2 json{}' | jq '.[] | .text' -r`; do
+  date=`echo $entry | sed 's/\(.*\) - \(.* [ap]m\) to \(.* [ap]m\)/{"title":"\1","start":"\2","end":"\3"}/g'`
+
+  title=`echo $date | jq -r '.title' 2>/dev/null`
+  start=`echo $date | jq -r '.start' 2>/dev/null`
+  end=`echo $date | jq -r '.end' 2>/dev/null`
+
+  [[ -z $title ]] && echo " - *** Skipping \"$entry\" ***" && continue
 
   startDate=`date -j -f "%I:%M %p" "$start" "+%s"`
   endDate=`date -j -f "%I:%M %p" "$end" "+%s"`
