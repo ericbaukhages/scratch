@@ -4,17 +4,26 @@ SCRATCH_DIR=~/.scratch
 
 SCRATCH_PREV_DIR=`pwd`
 SCRIPT_DIR=`dirname $0`
+TEMPLATE_DIR=$SCRIPT_DIR/templates
 
 cd $SCRATCH_DIR
 
-FILENAME="`date +"%Y-%m-%d"`.md"
+ENTRY="`date +"%Y-%m-%d"`.md"
 
 # Save the summary headers to a temporary file
-TEMPHEADERS=`mktemp`
-$SCRIPT_DIR/summary/index.js > $TEMPHEADERS
+SUMMARY=`mktemp`
+$SCRIPT_DIR/summary/index.js > $SUMMARY
 
-if [ -f $FILENAME ]; then
-  vim $FILENAME && cd $SCRATCH_PREV_DIR
+if [ -f $ENTRY ]; then
+  grep -q "SUMMARY" $ENTRY
+  if [ $? -eq 1 ]; then
+    vim $ENTRY +"normal G" +"r $TEMPLATE_DIR/summary.md" \
+      +"normal G" +"r $SUMMARY" +"normal G" && cd $SCRATCH_PREV_DIR
+  else
+    vim $ENTRY && cd $SCRATCH_PREV_DIR
+  fi
 else
-  vim +"r template.md" +"r $TEMPHEADERS" $FILENAME && cd $SCRATCH_PREV_DIR
+  vim +"r $TEMPLATE_DIR/notes.md" +"normal G" \
+    +"r $TEMPLATE_DIR/summary.md" +"normal G" \
+    +"r $SUMMARY" $ENTRY && cd $SCRATCH_PREV_DIR
 fi
