@@ -1,0 +1,11 @@
+{
+  "name": "summary",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "NONE",
+  "private": true,
+  "dependencies": {
+    "commander": "^2.20.0",
+    "moment": "^2.24.0"
+  }
+}
