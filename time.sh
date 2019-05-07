@@ -1,6 +1,7 @@
 #!/bin/bash
 
 SCRATCH_DIR=~/.scratch
+MAX_OUTPUT=1
 
 INPUT="$1"
 
@@ -26,13 +27,22 @@ outputTime()
   echo "${hours}h ${minutes}m ${seconds}s"
 }
 
+printLn()
+{
+  OUTPUT_LVL=$2
+
+  if [[ $OUTPUT_LVL -le $MAX_OUTPUT ]]; then
+    echo "$1"
+  fi
+}
+
 if [[ ! -e $INPUT ]]; then
   DATE=`dateFromFile $INPUT`
   echo "No record found for $DATE"
   exit 1
 fi
 
-echo "==== TIME ===="
+printLn "==== TIME ====" 2
 
 totalSeconds=0
 lunchSeconds=0
@@ -58,10 +68,10 @@ for entry in `pandoc -t html $INPUT | pup 'h2 json{}' | jq '.[] | .text' -r`; do
     lunchSeconds=$(($lunchSeconds + $diff))
   fi
 
-  echo " - $title: `outputTime $diff`"
+  printLn " - $title: `outputTime $diff`" 0
 done
 unset IFS
 
-echo "==== TOTAL ===="
-echo "Total time tracked for `dateFromFile $INPUT`: `outputTime $(($totalSeconds - $lunchSeconds))`"
-echo "                  including LUNCH: `outputTime $totalSeconds`"
+printLn "==== TOTAL ====" 2
+printLn "Total time tracked for `dateFromFile $INPUT`: `outputTime $(($totalSeconds - $lunchSeconds))`" 1
+printLn "                  including LUNCH: `outputTime $totalSeconds`" 2
