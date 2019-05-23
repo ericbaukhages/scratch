@@ -17,8 +17,8 @@ exec(`timew export ${exportDate}`, (err, stdout, stderr) => {
 
   let timesheet = JSON.parse(stdout)
   for(let entry of timesheet) {
-    let title = entry.tags.join(" ")
-    projects[title] = projects[title] ? projects[title] : { total: 0 }
+    let title = entry.tags ? entry.tags.join(" ") : "NO TAGS"
+    projects[title] = projects[title] ? projects[title] : { total: 0, tags: entry.tags }
 
     projects[title].total += moment(entry.end).diff(moment(entry.start))
   }
