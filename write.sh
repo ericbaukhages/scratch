@@ -8,10 +8,21 @@ TEMPLATE_DIR=$SCRIPT_DIR/templates
 
 cd $SCRATCH_DIR
 
-FILENAME="`date +"%Y-%m-%d"`.md"
+if [[ "$#" -eq 1 ]]; then
+  DATE="$1"
+else
+  DATE="`date +"%Y-%m-%d"`"
+fi
+
+FILENAME="$DATE.md"
+
+# New line after `echo` is needed
+ENTRY=`mktemp`
+echo -e "\n## `date +'%I:%M%p'`" > $ENTRY
 
 if [ -f $FILENAME ]; then
-  vim $FILENAME && cd $SCRATCH_PREV_DIR
+  vim +"normal G" +"r $ENTRY" +"normal G" $FILENAME && cd $SCRATCH_PREV_DIR
 else
-  vim +"r $TEMPLATE_DIR/notes.md" +"normal G" $FILENAME && cd $SCRATCH_PREV_DIR
+  vim +"r $TEMPLATE_DIR/notes.md" +"normal G" +"r $ENTRY" +"normal G" $FILENAME && cd $SCRATCH_PREV_DIR
+
 fi
