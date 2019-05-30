@@ -21,10 +21,9 @@ if [[ ! -e $FILENAME ]]; then
   exit 1
 fi
 
-
 # Save the summary headers to a temporary file
 SUMMARY=`mktemp`
-$SCRIPT_DIR/summary/index.js > $SUMMARY
+$SCRIPT_DIR/summary/index.js $DATE > $SUMMARY
 
 if [ -f $FILENAME ]; then
   grep -q "SUMMARY" $FILENAME
