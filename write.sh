@@ -1,6 +1,8 @@
 #!/bin/bash
 
-SCRATCH_DIR=~/.scratch
+if [ -z "$SCRATCH_DIR" ]; then
+  SCRATCH_DIR=~/.scratch
+fi
 
 SCRATCH_PREV_DIR=`pwd`
 SCRIPT_DIR=`dirname $0`
