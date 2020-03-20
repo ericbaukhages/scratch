@@ -21,15 +21,14 @@ alias scratch="~/Downloads/personal/scratch/write.sh"
 ## Example Document
 
 ```
-# ============= TASKS =============
-
 # ============= NOTES =============
 
-## Meeting - 9:00 am to 10:00 am
+## 09:45AM
 
-## Email - 10:00 am to 10:15 am
+Something cool happened today.
 
-## Coding - 10:15 am to 12:00 pm
+## 01:13PM
 
-## Lunch - 12:00 pm to 1:00 pm
+Had a really cool lunch.
+
 ```
