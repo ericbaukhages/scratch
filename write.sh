@@ -25,6 +25,11 @@ echo -e "\n## `date +'%I:%M%p'`" > $ENTRY
 if [ -f $FILENAME ]; then
   vim +"normal G" +"r $ENTRY" +"normal G" $FILENAME && cd $SCRATCH_PREV_DIR
 else
-  vim +"r $TEMPLATE_DIR/notes.md" +"normal G" +"r $ENTRY" +"normal G" $FILENAME && cd $SCRATCH_PREV_DIR
+  TEMPLATE="$TEMPLATE_DIR/notes.md"
 
+  if [ -f $TEMPLATE ]; then
+    vim +"r $TEMPLATE_DIR/notes.md" +"normal G" +"r $ENTRY" +"normal G" $FILENAME && cd $SCRATCH_PREV_DIR
+  else
+    vim +"r $ENTRY" +"normal G" $FILENAME && cd $SCRATCH_PREV_DIR
+  fi
 fi
