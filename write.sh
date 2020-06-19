@@ -25,5 +25,11 @@ else
   vim +"r $ENTRY" +"normal G" $FILENAME
 fi
 
+
+# If changes were made, make sure to add a new line, if the last line isn't already newline
+if [ -e "$FILENAME" ] && [ ! -z "$(tail --lines=1 $FILENAME)" ]; then
+  echo >> $FILENAME
+fi
+
 # Go back to previous directory
 cd $SCRATCH_PREV_DIR
