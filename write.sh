@@ -5,8 +5,6 @@ if [ -z "$SCRATCH_DIR" ]; then
 fi
 
 SCRATCH_PREV_DIR=`pwd`
-SCRIPT_DIR=`dirname $0`
-TEMPLATE_DIR=$SCRIPT_DIR/templates
 
 cd $SCRATCH_DIR
 
@@ -18,18 +16,14 @@ fi
 
 FILENAME="$DATE.md"
 
-# New line after `echo` is needed
 ENTRY=`mktemp`
-echo -e "\n## `date +'%I:%M%p'`" > $ENTRY
+echo -e "## $(date +'%I:%M%p')\n" >> $ENTRY
 
 if [ -f $FILENAME ]; then
-  vim +"normal G" +"r $ENTRY" +"normal G" $FILENAME && cd $SCRATCH_PREV_DIR
+  vim +"normal G" +"r $ENTRY" +"normal G" $FILENAME
 else
-  TEMPLATE="$TEMPLATE_DIR/notes.md"
-
-  if [ -f $TEMPLATE ]; then
-    vim +"r $TEMPLATE_DIR/notes.md" +"normal G" +"r $ENTRY" +"normal G" $FILENAME && cd $SCRATCH_PREV_DIR
-  else
-    vim +"r $ENTRY" +"normal G" $FILENAME && cd $SCRATCH_PREV_DIR
-  fi
+  vim +"r $ENTRY" +"normal G" $FILENAME
 fi
+
+# Go back to previous directory
+cd $SCRATCH_PREV_DIR
